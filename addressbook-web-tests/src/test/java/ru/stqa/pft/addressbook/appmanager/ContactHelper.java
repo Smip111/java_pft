@@ -24,4 +24,24 @@ public class ContactHelper extends HelperBase {
         type(By.name("home"),contactData.getHome());
 
     }
+
+    public void selectContact() {
+        click(By.name("selected[]"));
+    }
+
+    public void deleteModificatedContacts() {
+        click(By.xpath("//div[@id='content']/form[2]/input[2]"));
+    }
+
+    public void initContactModification() {
+        click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img"));
+    }
+
+    public void submitContactModification() {
+        click(By.xpath("//div[@id='content']/form[1]/input[22]"));
+    }
+
+    public void returnToHomePage() {
+        click(By.linkText("home page"));
+    }
 }
