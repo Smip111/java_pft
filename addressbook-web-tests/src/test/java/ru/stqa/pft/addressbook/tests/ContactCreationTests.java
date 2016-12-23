@@ -10,12 +10,12 @@ import java.util.List;
 
 public class ContactCreationTests extends TestBase {
 
-    @Test
+    @Test (enabled = false)
     public void testContactCreation() {
 
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
         List<ContactData> before=app.getContactHelper().getContactList();
-        app.getNavigationHelper().goToContactPage();
+        app.goTo().goToContactPage();
         System.out.println(before);
         ContactData contact=new ContactData("Peter", "Ivanov", "Moscow, Tverskaya str, 25, 8", "+7(495)111-11-11","test1");
         app.getContactHelper().createContact(contact);

@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class ContactModificationTests extends TestBase {
 
-    @Test
+    @Test (enabled = false)
     public void testContactModification(){
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
         if (! app.getContactHelper().isThereAContact()){
-            app.getNavigationHelper().goToContactPage();
+            app.goTo().goToContactPage();
             app.getContactHelper().createContact(new ContactData("Peter", "Ivanov", "Moscow, Tverskaya str, 25, 8", "+7(495)111-11-11","test1"));
         }
         List<ContactData> before=app.getContactHelper().getContactList();
