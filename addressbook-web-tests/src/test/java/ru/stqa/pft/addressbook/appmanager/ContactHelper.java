@@ -131,4 +131,8 @@ public class ContactHelper extends HelperBase {
                 .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work).withAddress(address).withEmail(email)
                 .withEmail2(email2).withEmail3(email3);
     }
+
+    public int count() {
+        return wd.findElements(By.name("selected[]")).size();
+    }
 }

@@ -19,6 +19,8 @@ public class ContactData {
     private String address;
 
     private String home;
+
+    @Expose
     private String group;
     private String homePhone;
     private String mobilePhone;
