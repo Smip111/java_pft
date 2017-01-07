@@ -1,39 +1,71 @@
 package ru.stqa.pft.addressbook.model;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
 
-
+    @Id
+    @Column(name = "id")
     private int id = Integer.MAX_VALUE;
 
     @Expose
+    @Column(name = "firstname")
     private String firstName;
 
     @Expose
+    @Column(name = "lastname")
     private String lastName;
 
     @Expose
+    @Transient
     private String address;
 
+    @Column(name = "home")
+    @Type(type = "text")
     private String home;
 
     @Expose
+    @Transient
     private String group;
+
+    @Transient
     private String homePhone;
+
+    @Column(name = "mobile")
+    @Type(type = "text")
     private String mobilePhone;
+
+    @Column(name = "work")
+    @Type(type = "text")
     private String workPhone;
+
+    @Transient
     private String allPhones;
+
+    @Transient
     private String email;
+
+    @Transient
     private String email2;
+
+    @Transient
     private String email3;
+
+    @Transient
     private String allEmails;
-    private File photo;
+
+    @Column(name = "photo")
+    @Type(type = "text")
+    private String photo;
 
     public File getPhoto() {
-        return photo;
+        return new File(photo);
     }
 
     public String getEmail() {
@@ -163,7 +195,7 @@ public class ContactData {
     }
 
     public ContactData withPhoto(File photo) {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
@@ -176,7 +208,8 @@ public class ContactData {
 
         if (id != that.id) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        return lastName != null ? lastName.equals(that.lastName) : that.lastName == null;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        return home != null ? home.equals(that.home) : that.home == null;
 
     }
 
@@ -185,6 +218,7 @@ public class ContactData {
         int result = id;
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (home != null ? home.hashCode() : 0);
         return result;
     }
 
@@ -194,6 +228,8 @@ public class ContactData {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", home='" + home + '\'' +
+                ", homePhone='" + homePhone + '\'' +
                 '}';
     }
 }
