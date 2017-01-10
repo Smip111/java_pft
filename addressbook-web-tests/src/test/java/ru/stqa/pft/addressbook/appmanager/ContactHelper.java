@@ -30,7 +30,11 @@ public class ContactHelper extends HelperBase {
         type(By.name("home"),contactData.getHome());
 //        attach(By.name("photo"),contactData.getPhoto());
         if (creation){
-            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+            if (contactData.getGroups().size()>0) {
+                Assert.assertTrue(contactData.getGroups().size()==1);
+                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData
+                        .getGroups().iterator().next().getName());
+            }
         }else {
             Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
@@ -87,6 +91,35 @@ public class ContactHelper extends HelperBase {
         deleteModificatedContacts();
     }
 
+    public void toGroup(ContactData contact){
+        selectContactById(contact.getId());
+        selectGroupByName(contact.getGroups().iterator().next().getName());
+        addContactToGroup();
+//        returnToHomePage();
+    }
+
+    public void fromGroup(ContactData contact) {
+        filterHomePageByGroup(contact.getGroups().iterator().next().getName());
+        selectContactById(contact.getId());
+        deleteContactFromGroup();
+    }
+
+    private void filterHomePageByGroup(String name) {
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(name);
+    }
+
+    private void addContactToGroup() {
+        click(By.name("add"));
+    }
+
+    private void deleteContactFromGroup(){
+        click(By.name("remove"));
+    }
+
+    private void selectGroupByName(String name) {
+        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(name);
+    }
+
     public Contacts all() {
         Contacts contacts=new Contacts();
         List<WebElement> elements=wd.findElements(By.name("entry"));
@@ -135,4 +168,6 @@ public class ContactHelper extends HelperBase {
     public int count() {
         return wd.findElements(By.name("selected[]")).size();
     }
+
+
 }

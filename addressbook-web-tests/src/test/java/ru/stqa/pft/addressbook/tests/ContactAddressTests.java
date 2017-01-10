@@ -19,7 +19,7 @@ public class ContactAddressTests extends TestBase{
             app.goTo().contactPage();
             app.contact().create(new ContactData()
                     .withFirstName("Peter").withLastName("Ivanov").withAddress("Moscow, Tverskaya str, 25, 8")
-                    .withHome("+7(495)111-11-11").withGroup("test1"));
+                    .withHome("+7(495)111-11-11"));
         }
     }
 

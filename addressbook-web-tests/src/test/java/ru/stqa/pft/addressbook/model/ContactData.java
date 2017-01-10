@@ -5,6 +5,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "addressbook")
@@ -29,10 +31,6 @@ public class ContactData {
     @Column(name = "home")
     @Type(type = "text")
     private String home;
-
-    @Expose
-    @Transient
-    private String group;
 
     @Transient
     private String homePhone;
@@ -63,6 +61,11 @@ public class ContactData {
     @Column(name = "photo")
     @Type(type = "text")
     private String photo;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "address_in_groups"
+            ,joinColumns = @JoinColumn(name = "id"),inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<GroupData> groups=new HashSet<GroupData>();
 
     public File getPhoto() {
         return new File(photo);
@@ -116,12 +119,12 @@ public class ContactData {
         return home;
     }
 
-    public String getGroup() {
-        return group;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public Groups getGroups() {
+        return new Groups(groups);
     }
 
     public ContactData withId(int id) {
@@ -146,11 +149,6 @@ public class ContactData {
 
     public ContactData withHome(String home) {
         this.home = home;
-        return this;
-    }
-
-    public ContactData withGroup(String group) {
-        this.group = group;
         return this;
     }
 
@@ -199,6 +197,7 @@ public class ContactData {
         return this;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -209,7 +208,8 @@ public class ContactData {
         if (id != that.id) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        return home != null ? home.equals(that.home) : that.home == null;
+        if (home != null ? !home.equals(that.home) : that.home != null) return false;
+        return groups != null ? groups.equals(that.groups) : that.groups == null;
 
     }
 
@@ -219,6 +219,7 @@ public class ContactData {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (home != null ? home.hashCode() : 0);
+        result = 31 * result + (groups != null ? groups.hashCode() : 0);
         return result;
     }
 
@@ -229,7 +230,11 @@ public class ContactData {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", home='" + home + '\'' +
-                ", homePhone='" + homePhone + '\'' +
                 '}';
+    }
+
+    public ContactData inGroup(GroupData group) {
+        groups.add(group);
+        return this;
     }
 }
